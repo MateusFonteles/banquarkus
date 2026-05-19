@@ -506,7 +506,8 @@ O planejamento estratégico para a evolução deste ecossistema está dividido e
 1.  **Migração para a Opção A (Persistência Avançada de Volumes):** Reescrever o script `up-db.sh` para abolir a flag `-v`. O objetivo é criar uma lógica de checagem profunda capaz de reaproveitar os volumes existentes no disco rígido do WSL2 de forma segura, impedindo conflitos de metadados quando o cluster for reiniciado.
 2.  **Criação das Coleções Reais do Banco (Padrão pt-BR):** Substituir a estrutura de "Teste" pelo ecossistema do simulador bancário nacional, criando as entidades Java `ContaBancaria.java` e `Movimentacao.java`.
 3.  **Implementação do Serviço Oculto de Consolidação:** Desenvolver um componente agendador (`@Scheduled` no Quarkus) que rodará em segundo plano. Ele utilizará as credenciais do `admin_geral` para extrair as movimentações aprovadas na base operacional (`banquarkus_operacional`) e atualizar os saldos reais e imutáveis dentro do cofre protegido (`banquarkus_central`).
-
+No arquivo bash, colocar no log qual foi o container que ganhou a eleição.
+No próximo passo ele está chamando o mongo1 nominalmente, isso não poderia causar uma falha?  
 ---
 
 ## 🔮 O Vislumbre do Futuro: O Projeto em Nível Avançado
