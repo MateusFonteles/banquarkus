@@ -1,0 +1,42 @@
+services:
+  mongo1:
+    image: mongo:7.0
+    container_name: mongo1
+    command: ["--replSet", "banco-rs", "--bind_ip_all"]
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongo1_data:/data/db
+    networks:
+      - banco-network
+
+  mongo2:
+    image: mongo:7.0
+    container_name: mongo2
+    command: ["--replSet", "banco-rs", "--bind_ip_all"]
+    ports:
+      - "127.0.0.1:27018:27017"
+    volumes:
+      - mongo2_data:/data/db
+    networks:
+      - banco-network
+
+  mongo3:
+    image: mongo:7.0
+    container_name: mongo3
+    command: ["--replSet", "banco-rs", "--bind_ip_all"]
+    ports:
+      - "127.0.0.1:27019:27017"
+    volumes:
+      - mongo3_data:/data/db
+    networks:
+      - banco-network
+
+networks:
+  banco-network:
+    driver: bridge
+
+volumes:
+  mongo1_data:
+  mongo2_data:
+  mongo3_data:
