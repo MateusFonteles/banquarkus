@@ -32,6 +32,23 @@ services:
     networks:
       - banco-network
 
+  quarkus-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: banquarkus-api
+    ports:
+      - "8080:8080" # Porta principal da API
+      - "5005:5005" # Porta para conectar o Debugger da sua IDE
+    volumes:
+      - ./src:/workspace/app/src # Mapeamento para o Live Reload funcionar
+    networks:
+      - banco-network
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+
 networks:
   banco-network:
     driver: bridge

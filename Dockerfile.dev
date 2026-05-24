@@ -1,0 +1,19 @@
+# Usamos a imagem oficial com Maven e Java 21
+FROM maven:3.9.6-eclipse-temurin-21
+
+WORKDIR /workspace/app
+
+# Copiamos apenas o pom.xml (não precisamos mais copiar a pasta .mvn e o arquivo mvnw)
+COPY pom.xml .
+
+# Usamos o 'mvn' nativo do sistema do contêiner para baixar as dependências
+RUN mvn dependency:go-offline
+
+# Copiamos o código fonte
+COPY src src
+
+# Expomos a porta da API e do Debugger
+EXPOSE 8080 5005
+
+# Rodamos o Quarkus usando o Maven nativo
+CMD ["mvn", "quarkus:dev", "-Dquarkus.http.host=0.0.0.0"]
