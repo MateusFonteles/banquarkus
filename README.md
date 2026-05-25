@@ -315,3 +315,70 @@ A falha BOLA (*Broken Object Level Authorization*) ocorre quando um sistema aces
 5. 💥 **O Vazamento:** Pressione Enter. A API do Quarkus não fará o cruzamento de identidade e devolverá o saldo da conta de terceiros diretamente no seu terminal, confirmando a vulnerabilidade crítica de autorização no sistema.
 
 *Este exercício encerra a configuração base do nosso laboratório. As próximas interações envolverão a refatoração do código-fonte para mitigar esta e outras falhas catalogadas.* ✅
+
+
+
+Usar a branch claude para fazer uma refatoração do código pelo claude, dentro do vscode. 
+
+One-line: below is a reusable, copy-pasteable prompt you can use later to run the refactor work.
+
+Prompt:
+You are a senior Java/Quarkus engineer and security-conscious refactor agent. Repository root: /home/mateus/projetos/banquarkus. Goal: modernize application, infra and security—update pom.xml, Dockerfile*, docker-compose.yml, run.sh, and all Java sources to use modern Java + Quarkus + Mongo best practices; replace existing comments with educational, explanatory comments that teach Java, Quarkus, infra and cybersecurity; and add tests and documentation. Work MUST be iterative, well-tested, and minimally breaking.
+
+Constraints & requirements:
+
+Use mvnw for builds. Prefer Java 17+ (or 21 if project supports it) and Quarkus 3.x+. Use Quarkus Mongo client and SmallRye JWT for auth.
+Preserve external API endpoints unless a clear migration path is provided.
+No secrets in source; use environment variables or secrets files and document them.
+Mitigate mass-assignment: introduce DTOs, explicit mapping, and input validation (jakarta.validation).
+Implement authentication/authorization for admin APIs using JWT roles (e.g., ADMIN) and document how to generate tokens.
+Add security hardening: validate inputs, sanitize outputs, set HTTP security headers, restrict CORS, and advise on rate-limiting and logging.
+Replace terse or unsafe comments with clear, educational comments explaining intent, Quarkus lifecycle, dependency injection, reactive vs. imperative decisions, and security rationale.
+Add unit tests and at least one integration test using an embedded Mongo or Testcontainers.
+Ensure project builds and tests pass locally, and Docker compose brings up the app + Mongo.
+Step-by-step tasks (execute and mark complete in todo list after each):
+
+Create branch refactor/modernize and backup relevant files.
+Audit codebase: produce a list of files to update.
+Update pom.xml: bump Quarkus & plugin versions, add Mongo & JWT deps, enable latest Java.
+Modernize Dockerfiles and docker-compose.yml: use multi-stage builds, non-root user, healthchecks, and named volumes for Mongo.
+Replace run.sh with safer script that reads env vars and validates required secrets.
+Refactor domain: introduce DTOs/records, use @Valid, and remove mass-assignment vulnerabilities.
+Refactor REST resources and services: use DTOs, explicit mappers, service layer, and apply @RolesAllowed/SmallRye JWT.
+Replace comments across Java files with educational explanations and security notes.
+Add tests: unit tests for services and an integration test with embedded Mongo/Testcontainers.
+Document run/test steps in README.md, include environment variables and JWT token generation example.
+Run full build and Docker compose up; fix issues until green.
+Commit logically, open PR with checklist and security notes.
+Deliverables:
+
+Updated pom.xml, Dockerfile*, docker-compose.yml, run.sh.
+Refactored Java sources and DTOs under java.
+Tests under src/test/java.
+Updated README.md with run/test and security guidance.
+A short migration doc (commit or file) listing breaking changes and how to adapt clients.
+Verification commands (run after each change):
+
+# use the project wrapper
+./mvnw -U -DskipTests=false clean test
+./mvnw -DskipTests=false package
+
+# build and run infra locally (compose file at repo root)
+docker compose build --pull
+docker compose up --build -d
+
+# tail logs
+docker compose logs -f
+Progress & reporting expectations:
+
+
+Update the todo list after each major step and include a 1–2 line progress update.
+Run tests and fix failures before moving to next step.
+Provide small, incremental commits with descriptive messages.
+When done, open a PR and include a security review summary and a runbook for production deployment.
+Notes for the agent executing this later:
+
+If a change risks breaking clients, explain the migration and provide compatibility shim or sample client update.
+Keep comments educational but concise — prefer short paragraphs at classes and methods.
+If any dependency upgrade causes incompatible API changes, report options and recommended fix.
+Would you like me to convert this into a checklist file in the repo (e.g., REFRACTOR_PROMPT.md) and commit it to refactor/modernize now?
